@@ -1,43 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script>
-        Handlebars.registerHelper('list', function(items, options) {
-            console.log(items, options)
+
+        let source = null
+        let template = null
+
+        var context = {
+            
+            people: [
+                { firstname: "John", lastname: "Doe" },
+                { firstname: "Jane", lastname: "Smith" },
+                { firstname: "Chris", lastname: "Evans" }
+            ],
+
+            persons: [
+                { name: 'Hasham', age: 23 },
+                { name: 'Teddy', age: 10 },
+                { name: 'Nelson', age: 40 }
+            ]
+        };
+
+        Handlebars.registerHelper('list', function (items, options) {
             let itemsAsHtml = items.map(item => `<li>${options.fn(item)}</li>`);
             return `<ul>\n${itemsAsHtml.join("\n")}\n</ul>`;
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            var source = document.getElementById("list-template").innerHTML;
-            
-            var template = Handlebars.compile(source);
+        Handlebars.registerPartial(
+            "person",
+            "{{person.name}} is {{person.age}} years old.\n"
+        )
 
-            var context = {
-                people: [
-                    { firstname: "John", lastname: "Doe" },
-                    { firstname: "Jane", lastname: "Smith" },
-                    { firstname: "Chris", lastname: "Evans" }
-                ]
-            };
-
+        function helperExample() {
             var html = template(context);
-
             document.getElementById("content").innerHTML = html;
+        }
+
+
+        function partialExample() {
+            var html = template(context)
+            document.getElementById('content').innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            source = document.getElementById('handlebar-template').innerHTML
+            template = Handlebars.compile(source)
+            helperExample()
+            partialExample()
         });
+
     </script>
 </head>
+
 <body>
-    <script id="list-template" type="text/x-handlebars-template">
+    <script id="handlebar-template" type="text/x-handlebars-template">
         {{#list people}}
             {{firstname}} {{lastname}}
         {{/list}}
+
+        {{#each persons}}
+            {{>person person=.}}
+        {{/each}}
+    </script>
+
+    <script id="partial-template" type="text/x-handlebars-template">
     </script>
 
     <div id="content"></div>
 </body>
+
 </html>
