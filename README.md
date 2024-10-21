@@ -83,7 +83,7 @@ Handlebars.registerHelper("list", (items, options)=>{
     var html = template(context);
 ```
 
-#### Inside Options
+#### Inside Options 
 
 ```javascript
 {
@@ -106,7 +106,7 @@ Handlebars.registerHelper("list", (items, options)=>{
 }
 ```
 
-#### body
+#### body 
 
 ```html
 <body>
@@ -118,6 +118,54 @@ Handlebars.registerHelper("list", (items, options)=>{
 
     <div id="content"></div>
 </body>
+```
+
+#### full file
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script>
+        Handlebars.registerHelper('list', function(items, options) {
+            console.log(items, options)
+            let itemsAsHtml = items.map(item => `<li>${options.fn(item)}</li>`);
+            return `<ul>\n${itemsAsHtml.join("\n")}\n</ul>`;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var source = document.getElementById("list-template").innerHTML;
+            
+            var template = Handlebars.compile(source);
+
+            var context = {
+                people: [
+                    { firstname: "John", lastname: "Doe" },
+                    { firstname: "Jane", lastname: "Smith" },
+                    { firstname: "Chris", lastname: "Evans" }
+                ]
+            };
+
+            var html = template(context);
+
+            document.getElementById("content").innerHTML = html;
+        });
+    </script>
+</head>
+<body>
+    <script id="list-template" type="text/x-handlebars-template">
+        {{#list people}}
+            {{firstname}} {{lastname}}
+        {{/list}}
+    </script>
+
+    <div id="content"></div>
+</body>
+</html>
 ```
 
 ### HTML Escaping
@@ -182,7 +230,7 @@ Nils is 20 years old.
 Teddy is 10 years old.
 Nelson is 40 years old.
 
-### Full File
+### FULL FILE
 
 ```html
 <!DOCTYPE html>
@@ -199,7 +247,7 @@ Nelson is 40 years old.
         let template = null
 
         var context = {
-            
+
             people: [
                 { firstname: "John", lastname: "Doe" },
                 { firstname: "Jane", lastname: "Smith" },
@@ -223,22 +271,11 @@ Nelson is 40 years old.
             "{{person.name}} is {{person.age}} years old.\n"
         )
 
-        function helperExample() {
-            var html = template(context);
-            document.getElementById("content").innerHTML = html;
-        }
-
-
-        function partialExample() {
-            var html = template(context)
-            document.getElementById('content').innerHTML = html;
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             source = document.getElementById('handlebar-template').innerHTML
             template = Handlebars.compile(source)
-            helperExample()
-            partialExample()
+            const html = template(context)
+            document.getElementById('content').innerHTML = html;
         });
 
     </script>
@@ -255,11 +292,7 @@ Nelson is 40 years old.
         {{/each}}
     </script>
 
-    <script id="partial-template" type="text/x-handlebars-template">
-    </script>
-
     <div id="content"></div>
 </body>
-
 </html>
 ```

@@ -12,7 +12,7 @@
         let template = null
 
         var context = {
-            
+
             people: [
                 { firstname: "John", lastname: "Doe" },
                 { firstname: "Jane", lastname: "Smith" },
@@ -36,22 +36,11 @@
             "{{person.name}} is {{person.age}} years old.\n"
         )
 
-        function helperExample() {
-            var html = template(context);
-            document.getElementById("content").innerHTML = html;
-        }
-
-
-        function partialExample() {
-            var html = template(context)
-            document.getElementById('content').innerHTML = html;
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             source = document.getElementById('handlebar-template').innerHTML
             template = Handlebars.compile(source)
-            helperExample()
-            partialExample()
+            const html = template(context)
+            document.getElementById('content').innerHTML = html;
         });
 
     </script>
@@ -68,10 +57,6 @@
         {{/each}}
     </script>
 
-    <script id="partial-template" type="text/x-handlebars-template">
-    </script>
-
     <div id="content"></div>
 </body>
-
 </html>
