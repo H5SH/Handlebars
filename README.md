@@ -167,3 +167,28 @@ Handlebars.registerHelper("list", (items, options)=>{
 </body>
 </html>
 ```
+
+### HTML Escaping
+
+If you don't want Handlebars to escape a value, use the "triple-stash", {{{
+
+```handlebars
+raw: {{{specialChars}}}
+html-escaped: {{specialChars}}
+```
+
+The special characters in the second line will be escaped:
+
+```handlebars
+raw: $ < > " ' ` =
+html-escaped: &amp; &lt; &gt; &quot; &#x27; &#x60; &#x3D;
+```
+
+Handlebars.SafeString. If you write a helper that generates its own HTML, you will usually want to return a new Handlebars.SafeString(result). In such a circumstance, you will want to manually escape parameters.
+
+```javascript
+Handlebars.registerHelper('bold', (text)=>{
+    var result = `<b>${Handlebars.escapeExpression(text)}</b>`;
+    return new Handlebars.SafeString(result)
+})
+```
