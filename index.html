@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script>
+        Handlebars.registerHelper('list', function(items, options) {
+            console.log(items, options)
+            let itemsAsHtml = items.map(item => `<li>${options.fn(item)}</li>`);
+            return `<ul>\n${itemsAsHtml.join("\n")}\n</ul>`;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var source = document.getElementById("list-template").innerHTML;
+            
+            var template = Handlebars.compile(source);
+
+            var context = {
+                people: [
+                    { firstname: "John", lastname: "Doe" },
+                    { firstname: "Jane", lastname: "Smith" },
+                    { firstname: "Chris", lastname: "Evans" }
+                ]
+            };
+
+            var html = template(context);
+
+            document.getElementById("content").innerHTML = html;
+        });
+    </script>
+</head>
+<body>
+    <script id="list-template" type="text/x-handlebars-template">
+        {{#list people}}
+            {{firstname}} {{lastname}}
+        {{/list}}
+    </script>
+
+    <div id="content"></div>
+</body>
+</html>
