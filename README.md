@@ -4,19 +4,19 @@
 
 ### Installation Tag
 
-`
+```html
 <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-`
+```
 
 ### Common Example
 
-`
+```html
 <script>
         var template = Handlebars.compile("Handlebars <b>{{ doesWhat }}</b>")
 
         console.log(template({doesWhat: "rocks!"}))
 </script>
-`
+```
 
 ### with and each
 
@@ -24,31 +24,31 @@
 
 The with-helper dives into an object-property, giving you access to its properties
 
-`
+```handlebars
 {{#with person}}
 {{firstname}} {{lastname}}
 {{/with}}
-`
+```
 
 #### each
 
 The each-helper iterates an array, allowing you to access the properties of each object via simple handlebars expressions.
 
-`
+```html
 <ul class='people_list'>
 {{#each people}}
 <li>{{this}}</li>
 {{/each}}
 </ul>
-`
+```
 
 ### Custom Helpers
 
 Handlebars helpers can be accessed from any context in a template. You can register a helper with the Handlebars.registerHelper method.
 
-`
+```handlebars
 {{firstname}} {{loud lastname}}
-`
+```
 
 ```javascript
 Handlebars.registerHelper('loud', (aString)=>{
