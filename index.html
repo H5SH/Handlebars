@@ -208,7 +208,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             source = document.getElementById('handlebar-template').innerHTML
-            template = Handlebars.compile(source)
+            template = Handlebars.templates(source)
             const html = template(context)
             document.getElementById('content').innerHTML = html;
         });
