@@ -23,6 +23,154 @@
                 { name: 'Hasham', age: 23 },
                 { name: 'Teddy', age: 10 },
                 { name: 'Nelson', age: 40 }
+            ],
+
+            testingIf: {
+                author: false,
+                firstName: "Yehuda",
+                lastName: "Katz"
+            },
+
+            cities: [
+                {
+                    name: 'Lahore',
+                    code: 'LAH'
+                },
+                {
+                    name: 'Karachi',
+                    code: 'KAR'
+                },
+                {
+                    name: 'Islamabad',
+                    code: 'ISL'
+                },
+                {
+                    name: 'Sialkot',
+                    code: 'SKT'
+                },
+                {
+                    name: 'Faislabad',
+                    code: 'FSD'
+                }
+            ],
+
+            users: [
+                {
+                    name: 'John Doe',
+                    email: 'john.doe@example.com',
+                    cart: [
+                        { name: 'Laptop', price: 1200 },
+                        { name: 'Smartphone', price: 800 }
+                    ],
+                    wishlist: [
+                        { name: 'Smartwatch', price: 300 }
+                    ],
+                    orders: [
+                        {
+                            items: [
+                                { name: 'Tablet', price: 400 }
+                            ],
+                            total: 400,
+                            date: '2024-09-01',
+                            status: 'Delivered'
+                        }
+                    ],
+                    preferences: {
+                        notifications: ['orderUpdates', 'promoEmails'],
+                        currency: 'USD'
+                    },
+                    "resident-in": 1
+                },
+                {
+                    name: 'Jane Smith',
+                    email: 'jane.smith@example.com',
+                    cart: [
+                        { name: 'Camera', price: 900 }
+                    ],
+                    wishlist: [
+                        { name: 'Drone', price: 1200 },
+                        { name: 'Lens', price: 400 }
+                    ],
+                    orders: [
+                        {
+                            items: [
+                                { name: 'Smartphone', price: 700 }
+                            ],
+                            total: 700,
+                            date: '2024-09-15',
+                            status: 'Processing'
+                        }
+                    ],
+                    preferences: {
+                        notifications: ['promoEmails'],
+                        currency: 'EUR'
+                    },
+                    "resident-in": 2
+                },
+                {
+                    name: 'Michael Johnson',
+                    email: 'michael.johnson@example.com',
+                    cart: [
+                        { name: 'Gaming Console', price: 500 },
+                        { name: 'Controller', price: 60 }
+                    ],
+                    wishlist: [
+                        { name: '4K TV', price: 1500 }
+                    ],
+                    orders: [],
+                    preferences: {
+                        notifications: ['orderUpdates'],
+                        currency: 'GBP'
+                    },
+                    "resident-in": 1
+                },
+                {
+                    name: 'Emily Davis',
+                    email: 'emily.davis@example.com',
+                    cart: [],
+                    wishlist: [
+                        { name: 'Headphones', price: 200 },
+                        { name: 'Bluetooth Speaker', price: 150 }
+                    ],
+                    orders: [
+                        {
+                            items: [
+                                { name: 'Laptop', price: 1000 }
+                            ],
+                            total: 1000,
+                            date: '2024-08-28',
+                            status: 'Shipped'
+                        }
+                    ],
+                    preferences: {
+                        notifications: ['orderUpdates', 'productRecommendations'],
+                        currency: 'AUD'
+                    },
+                    "resident-in": 4
+                },
+                {
+                    name: 'David Lee',
+                    email: 'david.lee@example.com',
+                    cart: [
+                        { name: 'Electric Guitar', price: 1200 }
+                    ],
+                    wishlist: [],
+                    orders: [
+                        {
+                            items: [
+                                { name: 'Acoustic Guitar', price: 800 }
+                            ],
+                            total: 800,
+                            date: '2024-09-10',
+                            status: 'Delivered'
+                        }
+                    ],
+                    preferences: {
+                        notifications: ['promoEmails', 'orderUpdates'],
+                        currency: 'CAD'
+                    },
+                    "resident-in": 5
+                }
             ]
         };
 
@@ -35,6 +183,28 @@
             "person",
             "{{person.name}} is {{person.age}} years old.\n"
         )
+
+        Handlebars.registerPartial(
+            "itemrow",
+            "<strong>{{item.name}}</strong>: {{item.price}},"
+        )
+
+        Handlebars.registerPartial(
+            "orderrow",
+            "<p>{{order.total}}, Ordered On: {{order.date}} <strong>{{order.status}}</strong></p>"
+        )
+
+        Handlebars.registerPartial(
+            "currency",
+            "Currency: {{currency}}"
+        )
+
+        Handlebars.registerPartial(
+            "city",
+            "City: {{lookup ../cities index}}"
+        )
+
+        Handlebars.registerHelper('length', (list)=> list.length)
 
         document.addEventListener('DOMContentLoaded', () => {
             source = document.getElementById('handlebar-template').innerHTML
@@ -55,8 +225,52 @@
         {{#each persons}}
             {{>person person=.}}
         {{/each}}
+
+        {{#if testingIf.author}}
+            {{#with testingIf}}
+                <h3>{{firstName}} {{lastName}}</h3>
+            {{/with}}
+            {{else}}
+            <h1>No Author</h1>
+        {{/if}}
+
+        {{#if 0 includeZero=true}}
+            <h1>Does Render</h1>
+        {{/if}}
+
+        {{#each users as | user |}}
+            {{#with user}}
+                <h1>{{name}}</h1>
+                <h2>{{email}}</h2>
+                <h3>Cart:</h3>
+                {{#each cart}}
+                    {{>itemrow item=.}}
+                {{/each}}
+                <h3>Wishlist:</h3>
+                {{#each wishlist}}
+                    {{>itemrow item=.}}
+                {{/each}}
+                <h3>{{#if orders}}Orders{{/if}}</h3>
+                {{#each orders as | order |}}
+                    {{#each order.items}}
+                        {{>itemrow item=.}}
+                    {{/each}}
+                    {{>orderrow order=order}}
+                {{/each}}
+                <ul>
+                    {{#each preferences.notifications}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+                {{>currency currency=preferences.currency}}
+                    {{#with (lookup ../cities [resident-in])~}}
+                        <h5>City: {{name}} Code: {{code}}</h5>
+                    {{/with}}
+                {{/with}}
+        {{/each}}
     </script>
 
     <div id="content"></div>
 </body>
+
 </html>
