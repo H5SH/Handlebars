@@ -473,8 +473,31 @@ const context = {
 
 Output
 
-```
+```output
 City: Karachi Code: KAR
+```
+
+### log
+
+The log helper allows for logging of context state while executing a template.
+
+```html
+{{log 'firstname' firstname 'lastname' name}}
+```
+
+Logging is conditional based on the level and to value set in Handlebars.logger.level, which defaults to info. All log statements at or above the current level will be output.
+
+```html
+{{log "debug logging" level="debug"}}
+{{log "info logging" level="info"}}
+{{log "info logging is the default"}}
+{{log "logging a warning" level="warn"}}
+{{log "logging an error" level="error"}}
+```
+
+```javascript
+Handlebars.logger.level = 'error'
+console.log('Current log level: ', Handlebars.logger.level, '\n---')
 ```
 
 ## FULL FILE
@@ -749,7 +772,8 @@ City: Karachi Code: KAR
                         <h5>City: {{name}} Code: {{code}}</h5>
                     {{/with}}
                 {{/with}}
-        {{/each}}
+            {{/each}}
+        {{log "users" users}}
     </script>
 
     <div id="content"></div>
